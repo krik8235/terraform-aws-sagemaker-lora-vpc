@@ -80,6 +80,7 @@ For enterprise-grade performance and security, the Pro Tier includes:
 - **Auto-Scaling Inference**: Automatic scaling of endpoint instances based on real-time request volume.
 - **Secret Management**: Integrated handling of API keys and sensitive configuration via `AWS Secrets Manager`.
 
+[**Get Pro License Now**](https://buy.stripe.com/3cI9AT7ti1JfcBmaVMbZe03)
 
 ## Project Structure
 
