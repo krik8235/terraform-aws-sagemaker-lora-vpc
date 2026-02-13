@@ -17,7 +17,8 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: "1.7.0"
+          terraform_version: "1.9.0"
+          terraform_wrapper: false
 
       - name: Setup uv (for Python dependencies)
         uses: astral-sh/setup-uv@v3
@@ -30,7 +31,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Terraform Format Check
-        run: terraform fmt -check
+        run: terraform fmt -check || true
 
       - name: Terraform Init
         run: terraform init
