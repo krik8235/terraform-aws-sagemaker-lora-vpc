@@ -1,10 +1,14 @@
-name: "Terraform Module Test"
+name: "Terraform Module Test & Release"
 
 on:
   push:
     branches: ["main"]
   pull_request:
     branches: ["main"]
+
+permissions:
+  id-token: write
+  contents: write
 
 jobs:
   terraform:
@@ -13,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Needed for automated tagging
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -20,18 +26,17 @@ jobs:
           terraform_version: "1.9.0"
           terraform_wrapper: false
 
-      - name: Setup uv (for Python dependencies)
+      - name: Setup uv
         uses: astral-sh/setup-uv@v3
 
-      - name: Configure AWS Credentials
+      - name: Configure AWS Credentials (via OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: us-east-1
 
       - name: Terraform Format Check
-        run: terraform fmt -check || true
+        run: terraform fmt -check
 
       - name: Terraform Init
         run: terraform init
@@ -41,3 +46,18 @@ jobs:
 
       - name: Terraform Plan (Dry Run)
         run: terraform plan -no-color
+
+      - name: Bump version and push tag
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a GitHub Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}

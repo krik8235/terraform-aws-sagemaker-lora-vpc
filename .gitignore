@@ -29,3 +29,6 @@ dist/
 tmp/
 
 TEST.md
+OPERATION.md
+
+_scripts/
