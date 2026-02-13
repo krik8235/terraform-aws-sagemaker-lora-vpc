@@ -1,0 +1,31 @@
+# local terraform directories
+.terraform/
+
+# local state files 
+*.tfstate
+*.tfstate.*
+
+# transient lock files (prevents concurrent runs)
+.terraform.tfstate.lock.info
+
+# lambda build artifacts
+package/
+function.zip
+
+# terraform plan files
+tfplan
+*.tfplan
+
+# crash logs
+crash.log
+crash.*.log
+
+# python & os junk
+__pycache__/
+*.py[cod]
+.DS_Store
+.git
+dist/
+tmp/
+
+TEST.md
