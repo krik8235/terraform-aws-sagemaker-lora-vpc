@@ -100,11 +100,11 @@ resource "aws_lambda_function_url" "proxy_url" {
   function_name      = aws_lambda_function.proxy.function_name
   authorization_type = "NONE"
   cors {
-    allow_origins    = var.allowed_origins
-    allow_methods    = ["*"] 
-    allow_headers    = ["*"]
-    expose_headers   = ["keep-alive", "date"]
-    max_age          = 86400
+    allow_origins  = var.allowed_origins
+    allow_methods  = ["*"]
+    allow_headers  = ["*"]
+    expose_headers = ["keep-alive", "date"]
+    max_age        = 86400
   }
 }
 
@@ -117,8 +117,8 @@ resource "aws_lambda_permission" "allow_public_access" {
 }
 
 resource "aws_lambda_permission" "allow_invoke_function" {
-  statement_id           = "AllowPublicInvokeFunction"
-  action                 = "lambda:InvokeFunction"
-  function_name          = aws_lambda_function.proxy.function_name
-  principal              = "*"
+  statement_id  = "AllowPublicInvokeFunction"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.proxy.function_name
+  principal     = "*"
 }

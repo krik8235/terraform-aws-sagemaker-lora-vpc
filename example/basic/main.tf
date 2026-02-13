@@ -7,7 +7,7 @@ resource "random_id" "suffix" {
 }
 
 module "lora_infra_demo" {
-  source = "../../" # root
+  source      = "../../" # root
   region      = var.region
   vpc_name    = var.vpc_name
   bucket_name = lower("${var.bucket_name}-${random_id.suffix.hex}")
